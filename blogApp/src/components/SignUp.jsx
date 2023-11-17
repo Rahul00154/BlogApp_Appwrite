@@ -1,23 +1,24 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import authService from "../appwrite/auth";
-import { Link, useNavigate } from "react-router-dom";
-import { login } from "../store/authSlice";
-import { Button, Input, Logo } from "./index";
-import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { Input, Button, Logo } from "./index";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice";
 
-function SignUp() {
+const Signup = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
 
-  const createAccount = async (data) => {
-    setError(error);
+  const create = async (data) => {
+    console.log(data);
+    setError("");
     try {
-      const userData = await authService.createAccount(data);
-      if (userData) {
+      const session = await authService.createAccount(data);
+      // console.log(session);
+      if (session) {
         const userData = await authService.getCurrentUser();
         if (userData) dispatch(login(userData));
         navigate("/");
@@ -38,10 +39,10 @@ function SignUp() {
           </span>
         </div>
         <h2 className="text-center text-2xl font-bold leading-tight">
-          Sign up to create account
+          Sign into your account
         </h2>
         <p className="mt-2 text-center text-base text-black/60">
-          Already have an account?&nbsp;
+          Already have an account?
           <Link
             to="/login"
             className="font-medium text-primary transition-all duration-200 hover:underline"
@@ -50,12 +51,12 @@ function SignUp() {
           </Link>
         </p>
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-
-        <form onSubmit={handleSubmit(createAccount)}>
+        <form onSubmit={handleSubmit(create)}>
           <div className="space-y-5">
             <Input
-              label="Full Name: "
-              placeholder="Enter your full name"
+              label="Name : "
+              placeholder="Enter your name"
+              type="text"
               {...register("name", {
                 required: true,
               })}
@@ -68,20 +69,20 @@ function SignUp() {
                 required: true,
                 validate: {
                   matchPatern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                    /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/.test(value) ||
                     "Email address must be a valid address",
                 },
               })}
             />
             <Input
               label="Password: "
-              type="password"
               placeholder="Enter your password"
+              type="password"
               {...register("password", {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">
+            <Button className="w-full" type="submit">
               Create Account
             </Button>
           </div>
@@ -89,6 +90,6 @@ function SignUp() {
       </div>
     </div>
   );
-}
+};
 
-export default SignUp;
+export default Signup;

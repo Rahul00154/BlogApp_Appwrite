@@ -1,10 +1,11 @@
-/* eslint-disable no-unused-vars */
 import { configureStore } from "@reduxjs/toolkit";
-import authSlice from "./authSlice";
+import authReducer from "./authSlice";
+import postReducer from "./postSlice";
 
 const store = configureStore({
   reducer: {
-    auth: authSlice,
+    auth: authReducer,
+    post: postReducer,
   },
 });
 

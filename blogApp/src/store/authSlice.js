@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -6,14 +5,13 @@ const initialState = {
   userData: null,
 };
 
-const authSlice = createSlice({
+const authSLice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    //these are actions
     login: (state, action) => {
       state.status = true;
-      state.userData = action.payload;
+      state.userData = action.payload.userData;
     },
     logout: (state) => {
       state.status = false;
@@ -22,6 +20,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout } = authSLice.actions;
 
-export default authSlice.reducer;
+export default authSLice.reducer;

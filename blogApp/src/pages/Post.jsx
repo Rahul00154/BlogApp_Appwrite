@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import appwriteService from "../../src/appwrite/appwriteServices";
-import { Button, Container } from "../components/index";
-import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import appwriteService from "../appwrite/config";
+import { Button, Container } from "../components";
+import parse from "html-react-parser";
 
 export default function Post() {
   const [post, setPost] = useState(null);
@@ -11,7 +11,6 @@ export default function Post() {
   const navigate = useNavigate();
 
   const userData = useSelector((state) => state.auth.userData);
-
   const isAuthor = post && userData ? post.userId === userData.$id : false;
 
   useEffect(() => {
@@ -41,7 +40,6 @@ export default function Post() {
             alt={post.title}
             className="rounded-xl"
           />
-
           {isAuthor && (
             <div className="absolute right-6 top-6">
               <Link to={`/edit-post/${post.$id}`}>
@@ -54,11 +52,11 @@ export default function Post() {
               </Button>
             </div>
           )}
+          <div className="w-full mb-6">
+            <h1 className="text-2xl font-bold">{post.title}</h1>
+          </div>
+          <div className="">{parse(post.content)}</div>
         </div>
-        <div className="w-full mb-6">
-          <h1 className="text-2xl font-bold">{post.title}</h1>
-        </div>
-        <div className="browser-css">{parse(post.content)}</div>
       </Container>
     </div>
   ) : null;

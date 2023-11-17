@@ -1,25 +1,18 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-empty */
-/* eslint-disable no-undef */
-/* eslint-disable no-useless-catch */
-import config from "../config/config";
-
+import Conf from "../conf/Conf";
 import { Client, Account, ID } from "appwrite";
 
 export class AuthService {
   client = new Client();
-
   account;
 
   constructor() {
     this.client
-      .setEndpoint(config.appwriteUrl)
-      .setProject(config.appwriteProjectId);
-
+      .setEndpoint(Conf.appWriteUrl)
+      .setProject(Conf.appWriteProjectId);
     this.account = new Account(this.client);
   }
 
-  async createAccount({ email, password, name }) {
+  async createAccount({ name, email, password }) {
     try {
       const userAccount = await this.account.create(
         ID.unique(),
@@ -27,13 +20,15 @@ export class AuthService {
         password,
         name
       );
+
       if (userAccount) {
-        //call another method
-        return this.login(email, password);
+        //call another function
+        return await this.login({ email, password });
       } else {
         return userAccount;
       }
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
@@ -50,16 +45,16 @@ export class AuthService {
     try {
       return await this.account.get();
     } catch (error) {
-      console.log("Appwrite service::getCurrentUser::error", error);
+      throw error;
     }
-    return null; //if user not found or problem in above trycatch block
+    return null;
   }
 
   async logout() {
     try {
-      await this.account.deleteSessions("current");
+      await this.account.deleteSessions();
     } catch (error) {
-      console.log("Appwrite service::logout::error", error);
+      throw error;
     }
   }
 }

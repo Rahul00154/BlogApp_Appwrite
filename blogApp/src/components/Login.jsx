@@ -1,20 +1,19 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { login as authLogin } from "../store/authSlice";
 import { Button, Input, Logo } from "./index";
-import { useDispatch } from "react-redux";
-import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
+import authService from "../appwrite/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-function Login() {
+const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
 
   const login = async (data) => {
-    setError(""); //when user get logged in we remove all error message
+    setError("");
     try {
       const session = await authService.login(data);
       if (session) {
@@ -26,6 +25,7 @@ function Login() {
       setError(error.message);
     }
   };
+
   return (
     <div className="flex items-center justify-center w-full">
       <div
@@ -37,50 +37,49 @@ function Login() {
           </span>
         </div>
         <h2 className="text-center text-2xl font-bold leading-tight">
-          Sign in to your account
+          Sign into your account
         </h2>
         <p className="mt-2 text-center text-base text-black/60">
-          Don&apos;t have any account?&nbsp;
+          Don't have an account?
           <Link
             to="/signup"
             className="font-medium text-primary transition-all duration-200 hover:underline"
           >
-            Sign Up
+            Sign up
           </Link>
         </p>
         {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
         <form onSubmit={handleSubmit(login)} className="mt-8">
           <div className="space-y-5">
             <Input
-              label="Email:"
-              placeholder="enter your email"
+              label="Email: "
+              placeholder="Enter your email"
               type="email"
               {...register("email", {
                 required: true,
                 validate: {
-                  matchPattern: (value) =>
-                    /^([\w\.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$/.test(value) ||
-                    "Email address must be in valid format",
+                  matchPatern: (value) =>
+                    /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/.test(value) ||
+                    "Email address must be a valid address",
                 },
               })}
             />
             <Input
-              label="Password"
-              placeholder="enter your password"
+              label="password"
               type="password"
+              placeholder="Enter your password"
               {...register("password", {
                 required: true,
               })}
             />
-
-            <Button type="submit" className="w-full">
-              Sign In
+            <Button className="w-full" type="submit">
+              Sign in
             </Button>
           </div>
         </form>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

@@ -1,7 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/rules-of-hooks */
-import React, { useId } from "react";
+import React from "react";
+import { useId } from "react";
 
 const Input = React.forwardRef(function Input(
   { label, type = "text", className = "", ...props },
