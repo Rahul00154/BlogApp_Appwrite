@@ -49,12 +49,13 @@ export class Service {
         {
           title,
           content,
+
           status,
           featuredImage,
         }
       );
     } catch (error) {
-      console.log(error);
+      console.log("Appwrite service::updatePost::error", error);
     }
   }
 
@@ -128,5 +129,3 @@ export class Service {
 const service = new Service(); //here we create an object using class
 
 export default service;
-
-console.log(service.getPost());
